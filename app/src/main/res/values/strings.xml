@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">WeatherAPIv1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="placeholder_home_frag_degree">0</string>
+    <string name="placeholder_home_frag_degree_2">0°</string>
+    <string name="placeholder_date">Day, Month</string>
+    <string name="placeholder_day">15 August</string>
+    <string name="placeholder_weather_info">Weather info</string>
+    <string name="placeholder_city_name">City name</string>
+    <string name="placeholder_country_name">Country name</string>
+    <string name="placeholder_time">00:00 AM</string>
+    <string name="placeholder_time_2">00:00</string>
+    <string name="placeholder_humidity">0%</string>
+    <string name="placeholder_wind_speed">0.0 km/h</string>
+    <string name="placeholder_wind_speed_2">0.0</string>
+    <string name="placeholder_calendar">dd mmm yyyy</string>
+    <string name="placeholder_temperature">0 celsius</string>
+    <string name="placeholder_see_all_saved_cities">See all saved cities</string>
+
+
+    <string name="text_degree_symbol">°</string>
+    <string name="text_details_table_hour">Hour</string>
+    <string name="text_details_table_temperature">Temperature</string>
+    <string name="text_details_table_wind_speed">Wind speed</string>
+    <string name="text_details_table_humidity">Humidity</string>
+    <string name="text_average">Average</string>
+    <string name="text_all_saved_cities">All saved cities</string>
+    <string name="text_no_result">Please search for a location...</string>
+
+    <string name="hint_search_location">Search location</string>
+</resources>
