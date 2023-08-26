@@ -50,6 +50,7 @@
         app:iconifiedByDefault="false"
         app:searchIcon="@drawable/ic_search"
         app:queryHint="@string/hint_search_location"
+        app:queryBackground="@android:color/transparent"
         android:theme="@style/CustomSearchInput"
         app:closeIcon="@drawable/ic_clear"
         app:layout_constraintEnd_toEndOf="parent"

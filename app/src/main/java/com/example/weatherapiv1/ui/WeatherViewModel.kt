@@ -1,5 +1,6 @@
 package com.example.weatherapiv1.ui
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,14 +32,6 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
     val geoCodingSearchResults: LiveData<List<GeoCodingData>> get() = _geoCodingSearchResults
 
     var allSavedHourlyWeatherData: LiveData<List<WeatherData>> = weatherRepository.getAllSavedHourlyWeatherData()
-
-    init {
-        allSavedHourlyWeatherData.value?.let {
-            for (data in allSavedHourlyWeatherData.value!!) {
-                updateWeatherInfo(data)
-            }
-        }
-    }
 
     fun upsert (weatherData: WeatherData) = viewModelScope.launch {
         weatherRepository.upsert(weatherData)
@@ -82,7 +75,6 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
         response.body()?.let {
             if (response.isSuccessful) {
                 setWeatherInfo(response.body()?.hourly!!, placeName, latitude, longitude)
-
             } else {
                 response.message()
             }
@@ -144,19 +136,7 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
         return false
     }
 
-    private fun updateWeatherInfo (weatherData: WeatherData) {
-        val calendar = Calendar.getInstance()
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = formatter.format(calendar.time)
-        val dayNumberFormatter = SimpleDateFormat ("d", Locale.getDefault())
-        val currentDayNum = dayNumberFormatter.format(date)!!
 
-        getFormattedDate(weatherData.hourlyInfoList[0]) { _, dayNum, _, _ ->
-            if (dayNum.toInt() < currentDayNum.toInt()) {
-                getHourlyWeatherInfoFromApi(weatherData.latitude, weatherData.longitude, weatherData.city)
-            }
-        }
-    }
 
     fun clearSearchData () {
         _geoCodingSearchResults.value = listOf()
@@ -169,6 +149,7 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
     }
 
     fun setWeatherDataOnline (placeName: String, view: View) {
+        Log.i("KENAN","setWeatherDataOnline: All saved weather data - ${allSavedHourlyWeatherData.value?.size}")
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
             val weatherData = weatherDataList.find { data -> data.city.equals(placeName, true)}
             weatherData?.isOnline = true
@@ -179,6 +160,7 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
     }
 
     private fun setOtherOnlineWeatherDataToOffline (onlineWeatherData: WeatherData) {
+        Log.i("KENAN","setWeatherDataOnline: All saved weather data - ${allSavedHourlyWeatherData.value?.size}")
         var foundOnlineWeatherData: WeatherData? = null
 
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
@@ -206,9 +188,23 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
         var foundWeatherData: WeatherData? = null
 
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
-            foundWeatherData = weatherDataList.find { weatherData -> placeName.equals(weatherData.city, true) }
+            foundWeatherData =
+                weatherDataList.find { weatherData -> placeName.equals(weatherData.city, true) }
         }
 
         return foundWeatherData != null
+    }
+
+    fun updateOutdatedInfo (weatherData: WeatherData) {
+        val calendar = Calendar.getInstance()
+        val currentDayNumber = calendar.get(Calendar.DAY_OF_MONTH)
+
+        allSavedHourlyWeatherData.value?.let { weatherDataList ->
+            getFormattedDate(weatherData.hourlyInfoList[0]) { _, dayNum, _, _ ->
+                if (dayNum.toInt() < currentDayNumber) {
+                    getHourlyWeatherInfoFromApi(weatherData.latitude, weatherData.longitude, weatherData.city)
+                }
+            }
+        }
     }
 }

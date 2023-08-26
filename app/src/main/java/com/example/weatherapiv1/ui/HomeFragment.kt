@@ -46,6 +46,7 @@ class HomeFragment : Fragment(), WeatherItemOnClickListener, SearchItemOnClickLi
         super.onViewCreated(view, savedInstanceState)
         weatherDatabase = WeatherDatabase(requireContext())
         weatherViewModel = ViewModelProvider(requireActivity(), WeatherViewModelFactory(weatherDatabase)).get(WeatherViewModel::class.java)
+
         dailyWeatherInfoAdapter = DailyWeatherInfoAdapter()
         dailyWeatherInfoAdapter.setListener(this)
         searchAdapter = SearchAdapter()
@@ -92,6 +93,8 @@ class HomeFragment : Fragment(), WeatherItemOnClickListener, SearchItemOnClickLi
 
                 getOnlineWeatherData(weatherDataList) { weatherData ->
                     if (weatherData != null) {
+                        weatherViewModel.updateOutdatedInfo(weatherData)
+
                         val currentDayHourlyInfo = getHourlyInfoOfTheCurrentDay(weatherData.hourlyInfoList)
 
                         getCurrentHourWeatherInfo(currentDayHourlyInfo) { currentTemp, currentWind, currentHum, currentWeatherDesc, currentWeatherCodeIcon ->
