@@ -1,6 +1,5 @@
 package com.example.weatherapiv1.ui
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -149,7 +148,6 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
     }
 
     fun setWeatherDataOnline (placeName: String, view: View) {
-        Log.i("KENAN","setWeatherDataOnline: All saved weather data - ${allSavedHourlyWeatherData.value?.size}")
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
             val weatherData = weatherDataList.find { data -> data.city.equals(placeName, true)}
             weatherData?.isOnline = true
@@ -160,7 +158,6 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
     }
 
     private fun setOtherOnlineWeatherDataToOffline (onlineWeatherData: WeatherData) {
-        Log.i("KENAN","setWeatherDataOnline: All saved weather data - ${allSavedHourlyWeatherData.value?.size}")
         var foundOnlineWeatherData: WeatherData? = null
 
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
