@@ -199,6 +199,7 @@ class WeatherViewModel (private val weatherRepository: WeatherRepository): ViewM
         allSavedHourlyWeatherData.value?.let { weatherDataList ->
             getFormattedDate(weatherData.hourlyInfoList[0]) { _, dayNum, _, _ ->
                 if (dayNum.toInt() < currentDayNumber) {
+                    delete(weatherData)
                     getHourlyWeatherInfoFromApi(weatherData.latitude, weatherData.longitude, weatherData.city)
                 }
             }
